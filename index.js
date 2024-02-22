@@ -11,22 +11,23 @@ axios.get(url).then((response) => {
   const records = [];
 
   rows.each((i, row) => {
-    const allText = $(row).find('span[itemprop="name"]').text();
-    const splitName = allText.split("Arrondissement");
+    // Extract the name of the arrondissement
+    const nameExtended = $(row).find('span[itemprop="name"]').text();
+    const splitName = nameExtended.split("Arrondissement");
     const name = splitName.length > 1 ? splitName[1].trim() : "";
 
-    const cells = $(row).find("td.rpop").get();
+    const years = $(row).find("td.rpop").get();
 
-    cells.forEach((cell, j) => {
-      const yearHeader = $(`th.rpop.prio${cells.length - j}`).attr(
+    years.forEach((year, j) => {
+      const yearHeader = $(`th.rpop.prio${years.length - j}`).attr(
         "data-coldate"
       );
-      const year = new Date(yearHeader).getFullYear();
+      const currentYear = new Date(yearHeader).getFullYear();
 
       const data = {
-        Year: year,
+        Year: currentYear,
         Name: name,
-        Population: $(cell).text().replace(/,/g, ""),
+        Population: $(year).text().replace(/,/g, ""),
       };
       records.push(data);
     });
